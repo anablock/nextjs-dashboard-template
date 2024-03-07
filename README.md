@@ -48,3 +48,42 @@ There are two ways you implement streaming in Next.js:
 * For specific components, with <Suspense>.
 
 `loading.tsx` is a special Next.js file built on top of Suspense, it allows you to create fallback UI to show as a replacement while page content loads.
+
+* stream specific components using React Suspense.  Suspense allows you to defer rendering parts of your application until some condition is met (e.g. data is loaded). You can wrap your dynamic components in Suspense. Then, pass it a fallback component to show while the dynamic component loads.
+
+## Deciding where to place your Suspense boundaries
+
+Where you place your Suspense boundaries will depend on a few things:
+* How you want the user to experience the page as it streams.
+* What content you want to prioritize.
+* If the components rely on data fetching.
+* Take a look at your dashboard page, is there anything you would've done differently?
+
+You could stream the whole page like we did with loading.tsx... but that may lead to a longer loading time if one of the components has a slow data fetch.
+You could stream every component individually... but that may lead to UI popping into the screen as it becomes ready.
+You could also create a staggered effect by streaming page sections. But you'll need to create wrapper components.
+Where you place your suspense boundaries will vary depending on your application. In general, it's good practice to move your data fetches down to the components that need it, and then wrap those components in Suspense. But there is nothing wrong with streaming the sections or the whole page if that's what your application needs.
+
+## Partial Pre-rendering
+
+Partial pre-rendering is a technique that allows you to pre-render only a part of your page. This is useful when you have a page with a mix of static and dynamic content.
+
+Next.js 14 contains a preview of Partial Prerendering – an experimental feature that allows you to render a route with a static loading shell, while keeping some parts dynamic. In other words, you can isolate the dynamic parts of a route. 
+
+When a user visits a route:
+
+A static route shell is served, ensuring a fast initial load.
+The shell leaves holes where dynamic content will load in asynchronous.
+The async holes are streamed in parallel, reducing the overall load time of the page.
+This is different from how your application behaves today, where entire routes are either entirely static or dynamic.
+
+Partial Prerendering combines ultra-quick static edge delivery with fully dynamic capabilities and we believe it has the potential to become the default rendering model for web applications, bringing together the best of static site generation and dynamic delivery.
+
+### How does Partial Prerendering work?
+Partial Prerendering leverages React's Concurrent APIs and uses Suspense to defer rendering parts of your application until some condition is met (e.g. data is loaded).
+
+The fallback is embedded into the initial static file along with other static content. At build time (or during revalidation), the static parts of the route are prerendered, and the rest is postponed until the user requests the route.
+
+It's worth noting that wrapping a component in Suspense doesn't make the component itself dynamic (remember you used unstable_noStore to achieve this behavior), but rather Suspense is used as a boundary between the static and dynamic parts of your route.
+
+The great thing about Partial Prerendering is that you don't need to change your code to use it. As long as you're using Suspense to wrap the dynamic parts of your route, Next.js will know which parts of your route are static and which are dynamic.
