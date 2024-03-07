@@ -1,5 +1,10 @@
-## Next.js App Router Course - Starter
+## Next.js
 
-This is the starter template for the Next.js App Router Course. It contains the starting code for the dashboard application.
+- use React hooks only with client side rendering (CSR)
+- use getServerSideProps or getStaticProps for server side rendering (SSR)
+- use getStaticPaths for dynamic routes
+- use getInitialProps for server side rendering (SSR) and client side rendering (CSR)
+- use `usePathname()` to get the current pathname
+- use `useQuery()` to get the current query
+- use `useRouter()` to get the current router
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
