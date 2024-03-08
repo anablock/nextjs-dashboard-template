@@ -87,3 +87,24 @@ The fallback is embedded into the initial static file along with other static co
 It's worth noting that wrapping a component in Suspense doesn't make the component itself dynamic (remember you used unstable_noStore to achieve this behavior), but rather Suspense is used as a boundary between the static and dynamic parts of your route.
 
 The great thing about Partial Prerendering is that you don't need to change your code to use it. As long as you're using Suspense to wrap the dynamic parts of your route, Next.js will know which parts of your route are static and which are dynamic.
+
+## URL Search Parameters
+There are a couple of benefits of implementing search with URL params:
+* **Bookmarkable and Shareable URLs**: Since the search parameters are in the URL, users can bookmark the current state of the application, including their search queries and filters, for future reference or sharing.
+* **Server-Side Rendering and Initial Load**: URL parameters can be directly consumed on the server to render the initial state, making it easier to handle server rendering.
+* **Analytics and Tracking**: Having search queries and filters directly in the URL makes it easier to track user behavior without requiring additional client-side logic.
+
+## Adding the search functionality
+These are the Next.js client hooks that you'll use to implement the search functionality:
+
+* `useSearchParams`- Allows you to access the parameters of the current URL. For example, the search params for this URL /dashboard/invoices?page=1&query=pending would look like this: {page: '1', query: 'pending'}.
+* `usePathname` - Lets you read the current URL's pathname. For example, for the route /dashboard/invoices, usePathname would return '/dashboard/invoices'.
+* `useRouter` - Enables navigation between routes within client components programmatically. There are multiple methods you can use.
+
+Here's a quick overview of the implementation steps:
+1. Capture the user's input.
+2. Update the URL with the search params.
+3. Keep the URL in sync with the input field.
+4. Update the table to reflect the search query.
+
+"use client" - This is a Client Component, which means you can use event listeners and hooks.
