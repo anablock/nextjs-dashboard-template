@@ -131,3 +131,5 @@ Debouncing is a great way to improve the performance of your application by redu
 Trigger Event: When an event that should be debounced (like a keystroke in the search box) occurs, a timer starts.
 Wait: If a new event occurs before the timer expires, the timer is reset.
 Execution: If the timer reaches the end of its countdown, the debounced function is executed.
+
+* fetch the data on the server, and pass it to the component as a prop.
