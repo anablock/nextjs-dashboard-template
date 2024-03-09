@@ -133,3 +133,6 @@ Wait: If a new event occurs before the timer expires, the timer is reset.
 Execution: If the timer reaches the end of its countdown, the debounced function is executed.
 
 * fetch the data on the server, and pass it to the component as a prop.
+
+## Server Actions
+
