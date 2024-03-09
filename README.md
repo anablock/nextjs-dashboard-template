@@ -167,4 +167,4 @@ An advantage of invoking a Server Action within a Server Component is progressiv
 5. Insert the data and handle any errors.
 6. Revalidate the cache and redirect the user back to invoices page.
 
-
+By adding the 'use server', you mark all the exported functions within the file as server functions. These server functions can then be imported into Client and Server components, making them extremely versatile.  You can also write Server Actions directly inside Server Components by adding "use server" inside the action.
