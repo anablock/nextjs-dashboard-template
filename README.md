@@ -305,3 +305,9 @@ Next.js allows you to create Dynamic Route Segments when you don't know the exac
 * `notFound` can be used when you try to fetch a resource that doesn't exist
 * `notFound` will take precedence over `error.tsx`, so you can reach out for it when you want to handle more specific errors
 
+## React Hooks
+
+### useFormState hook
+
+Takes two arguments: (action, initialState).
+Returns two values: [state, dispatch] - the form state, and a dispatch function (similar to useReducer)
