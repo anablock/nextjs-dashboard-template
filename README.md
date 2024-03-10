@@ -168,3 +168,6 @@ An advantage of invoking a Server Action within a Server Component is progressiv
 6. Revalidate the cache and redirect the user back to invoices page.
 
 By adding the 'use server', you mark all the exported functions within the file as server functions. These server functions can then be imported into Client and Server components, making them extremely versatile.  You can also write Server Actions directly inside Server Components by adding "use server" inside the action.
+
+Server Actions are also deeply integrated with Next.js caching. When a form is submitted through a Server Action, not only can you use the action to mutate data, but you can also revalidate the associated cache using APIs like revalidatePath and revalidateTag.
+
