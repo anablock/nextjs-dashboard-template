@@ -299,3 +299,9 @@ async function create(formData: FormData) {
 
 Next.js allows you to create Dynamic Route Segments when you don't know the exact segment name and want to create routes based on data. This could be blog post titles, product pages, etc. You can create dynamic route segments by wrapping a folder's name in square brackets. For example, [id], [post] or [slug].
 
+## Handling errors
+
+* `error.tsx` is useful for catching all errors
+* `notFound` can be used when you try to fetch a resource that doesn't exist
+* `notFound` will take precedence over `error.tsx`, so you can reach out for it when you want to handle more specific errors
+
