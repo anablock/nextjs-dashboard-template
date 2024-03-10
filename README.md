@@ -172,3 +172,130 @@ By adding the 'use server', you mark all the exported functions within the file 
 Server Actions are also deeply integrated with Next.js caching. When a form is submitted through a Server Action, not only can you use the action to mutate data, but you can also revalidate the associated cache using APIs like revalidatePath and revalidateTag.
 
 Behind the scenes, Server Actions create a POST API endpoint. This is why you don't need to create API endpoints manually when using Server Actions.
+
+ If you're working with forms that have many fields, you may want to consider using the entries() method with JavaScript's `Object.fromEntries()`. For example:
+
+```tsx
+const rawFormData = Object.fromEntries(formData.entries())
+```
+
+### Type validation and coercion
+It's important to validate that the data from your form aligns with the expected types in your database. For instance, if you add a console.log inside your action:
+  
+  ```tsx
+  console.log(typeof rawFormData.amount)
+  ```
+
+You might notice that the amount is a string, even if you expect it to be a number. This is because the FormData object returns all values as strings. You can use the Number() function to coerce the string to a number:
+  
+  ```tsx
+  const amount = Number(rawFormData.amount)
+  ```
+
+  To handle type validation, you have a few options. While you can manually validate types, using a type validation library can save you time and effort. For your example, we'll use Zod, a TypeScript-first validation library that can simplify this task for you.
+
+  Zod is a TypeScript-first schema declaration and validation library. It's designed to be easy to use and understand, and it's a great fit for Next.js applications. You can use Zod to validate the data from your form and ensure that it aligns with the expected types in your database.
+
+  To use Zod, you'll need to install it and create a schema that matches the expected types in your database. Then, you can use the schema to validate the data from your form.
+
+  ```tsx
+
+  import { z } from 'zod'
+
+  const schema = z.object({
+    amount: z.number(),
+    date: z.string(),
+    description: z.string(),
+  })
+
+  const validatedData = schema.parse(rawFormData)
+  ```
+
+  If the data from your form doesn't match the schema, Zod will throw an error. You can use a try...catch block to handle the error and provide feedback to the user.
+
+  ```tsx
+  try {
+    const validatedData = schema.parse(rawFormData)
+  } catch (error) {
+    console.error(error)
+  }
+  ```
+  You can also use Zod to coerce the data to the expected types. For example, you can use the .coerce() method to convert the date string to a Date object.
+
+  ```tsx
+  const schema = z.object({
+    amount: z.number(),
+    date: z.string().coerce((date) => new Date(date)),
+    description: z.string(),
+  })
+
+  const validatedData = schema.parse(rawFormData)
+  ```
+
+### Revalidate and redirect
+
+Next.js has a Client-side Router Cache that stores the route segments in the user's browser for a time. Along with prefetching, this cache ensures that users can quickly navigate between routes while reducing the number of requests made to the server.
+
+When you mutate data, you need to revalidate the cache to ensure that the user sees the updated data. You can use the revalidatePath and revalidateTag APIs to revalidate the cache.
+
+```tsx
+
+import { revalidatePath } from 'next/router'
+
+// Inside your Server Action
+async function create(formData: FormData) {
+  'use server'
+
+  // Logic to mutate data...
+
+  // Revalidate the cache
+  revalidatePath('/dashboard/invoices')
+}
+```
+
+You can also use the revalidateTag API to revalidate the cache based on a tag. This is useful when you want to revalidate the cache for multiple routes that share the same tag.
+
+```tsx
+import { revalidateTag } from 'next/router'
+
+// Inside your Server Action
+async function create(formData: FormData) {
+  'use server'
+
+  // Logic to mutate data...
+
+  // Revalidate the cache
+  revalidateTag('invoices')
+}
+```
+
+When you revalidate the cache, the user's browser will make a request to the server to fetch the updated data. This ensures that the user sees the most up-to-date information.
+
+When updating the data displayed in the invoices route, you want to clear this cache and trigger a new request to the server. You can do this with the revalidatePath function from Next.js:
+
+```tsx
+import { revalidatePath } from 'next/router'
+
+// Inside your Server Action
+async function create(formData: FormData) {
+  'use server'
+
+  // Logic to mutate data...
+
+  // Revalidate the cache
+  revalidatePath('/dashboard/invoices')
+}
+```
+
+## Steps to update an invoice:
+
+1. Create a new dynamic route segment with the invoice id.
+2. Read the invoice id from the page params.
+3. Fetch the specific invoice from your database.
+4. Pre-populate the form with the invoice data.
+5. Update the invoice data in your database.
+
+### Create a new dynamic route segment with the invoice `id`
+
+Next.js allows you to create Dynamic Route Segments when you don't know the exact segment name and want to create routes based on data. This could be blog post titles, product pages, etc. You can create dynamic route segments by wrapping a folder's name in square brackets. For example, [id], [post] or [slug].
+
