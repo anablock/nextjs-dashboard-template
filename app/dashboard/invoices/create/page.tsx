@@ -1,3 +1,4 @@
+//page is a Server Component that fetches customers and passes it to the <Form> component. It also renders the <Breadcrumbs> component.
 import Form from '@/app/ui/invoices/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchCustomers } from '@/app/lib/data';
