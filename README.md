@@ -311,3 +311,13 @@ Next.js allows you to create Dynamic Route Segments when you don't know the exac
 
 Takes two arguments: (action, initialState).
 Returns two values: [state, dispatch] - the form state, and a dispatch function (similar to useReducer)
+
+## Authentication
+
+The advantage of employing Middleware for this task is that the protected routes will not even start rendering until the Middleware verifies the authentication, enhancing both the security and performance of your application.
+
+### Password hashing
+
+It's good practice to hash passwords before storing them in a database. Hashing converts a password into a fixed-length string of characters, which appears random, providing a layer of security even if the user's data is exposed.
+
+In your seed.js file, you used a package called bcrypt to hash the user's password before storing it in the database. You will use it again later in this chapter to compare that the password entered by the user matches the one in the database. However, you will need to create a separate file for the bcrypt package. This is because bcrypt relies on Node.js APIs not available in Next.js Middleware.
